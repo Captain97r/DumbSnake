@@ -36,7 +36,6 @@ struct Snake {
 
 impl Snake {
     fn new(_len : usize) -> Self {
-
         Self {
             length: _len,
             body: Vec::new(),
@@ -46,8 +45,6 @@ impl Snake {
     }
 
     fn do_move(&mut self) {
-        
-
         for i in (1..self.length).rev() {
             let slice = &mut self.body[i-1..i+1];
             slice[1].x = slice[0].x;
@@ -55,11 +52,9 @@ impl Snake {
         }
 
         let head = self.body.get_mut(0);
-
         if head.is_none() {
             return;
         }
-
         let head : &mut Point = head.unwrap();
 
         match self.direction {
@@ -88,7 +83,6 @@ impl Snake {
     }
 
     fn draw(&self, term : &mut Stdout) {
-
         for i in 0..self.length {
             term.execute(cursor::MoveTo(self.body[i].x, self.body[i].y)).expect("Error");
             print!("O");
@@ -158,19 +152,20 @@ impl SnakeGame {
     }
 
     fn collision_detector(&mut self) {
-        //walls
+        // walls
         let head = &self.snake.body[0];
-
         if head.x == 0 || head.x == self.field_size.x - 1 || head.y == 0 || head.y == self.field_size.y - 1 {
             self.snake.kill();
         }
 
+        // body
         for i in 1..self.snake.length {
             if self.snake.body[0].x == self.snake.body[i].x && self.snake.body[0].y == self.snake.body[i].y {
                 self.snake.kill();
             }
         }
 
+        // food
         let head = &self.snake.body[0];
         if head.x == self.food.coords.x && head.y == self.food.coords.y {
             self.snake.feed();
